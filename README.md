@@ -49,3 +49,10 @@ MCP client
 | filesystem MCP     |
 | database MCP       |
 ----------------------
+
+### Building MCP server:
+
+#### Components:
+- **Tools**: Tools are schema-defined interfaces that LLMs can invoke. Each tool performs a single operation with clearly defined inputs and outputs.
+- **Resources**: Resources expose data from files, APIs, databases, or any other source that an AI needs to understand context. Applications can access this information directly and decide how to use it. 
+- **Tools**:

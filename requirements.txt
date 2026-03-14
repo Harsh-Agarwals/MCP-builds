@@ -1,3 +1,5 @@
 fastapi[standard]
 uvicorn
 python-dotenv
+mcp[fastapi]
+mcp[cli]
