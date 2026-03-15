@@ -18,6 +18,7 @@ Here, we will not just integrate MCPs into our workflow to build simple applicat
 5️⃣ *multi-server architecture*
 
 We'll build:
+|- **Simple MCP** for simple mathematical functions as tools and resources
 |- **filesystem MCP** [search files, read files, list files, summarize files]
 |- **database MCP** [query data, generate report]
 |- **AI assistants** utilizing some built-in and external MCP servers (eg. using filesystem and database MCPs like *"Compare sales numbers with the forecast document."*)
