@@ -3,3 +3,4 @@ uvicorn
 python-dotenv
 mcp[fastapi]
 mcp[cli]
+yfinance

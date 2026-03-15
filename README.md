@@ -56,4 +56,30 @@ MCP client
 #### Components:
 - **Tools**: Tools are schema-defined interfaces that LLMs can invoke. Each tool performs a single operation with clearly defined inputs and outputs.
 - **Resources**: Resources expose data from files, APIs, databases, or any other source that an AI needs to understand context. Applications can access this information directly and decide how to use it. 
-- **Tools**:
+- **Prompts**: prompts to inject to LLM for use cases related to MCP.
+
+## For testing MCP (this will open MCP inspector - GUI for checking MCP servers working):
+- use `mcp dev path_to_mcp_server_file`
+
+## For connection of MCP to Claude Desktop
+- use `mcp install path_to_mcp_server_file --name "mcp_name"`
+
+## Updates in Claude desktop config json file (an example):
+```
+"mcpServers": {
+    "finance mcp": {
+      "command": "path_to_uv",
+      "args": [
+        "run",
+        "--frozen",
+        "--with",
+        "mcp[cli]",
+        "--with",
+        "yfinance",
+        "mcp",
+        "run",
+        "path_to_mcp_server_file"
+      ]
+    }
+  }
+```
