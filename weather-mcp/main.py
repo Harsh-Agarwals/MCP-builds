@@ -1,15 +1,16 @@
 import os
 from pathlib import Path
-from xml.etree.ElementTree import TreeBuilder
 from mcp.server.fastmcp import FastMCP
 from dotenv import load_dotenv
 import requests
+import tempfile
 import logging
 
 load_dotenv()
 mcp = FastMCP("weatherMcp")
 OPENWEATHER_API = os.getenv("OPENWEATHER_API_KEY")
-LOG_DIR = os.path.join(Path.cwd(), "logs")
+# LOG_DIR = os.path.join(Path.cwd(), "logs")
+LOG_DIR = os.path.join(tempfile.gettempdir(), "weather-mcp-logs")
 os.makedirs(LOG_DIR, exist_ok=True)
 logging_filename = os.path.join(LOG_DIR, "weather_mcp_log.log")
 # if not os.path.exists(logging_filename):
@@ -47,6 +48,11 @@ def format_alert(json_data: dict):
 
 @mcp.tool()
 def get_alerts(city: str):
+    """
+    For getting weather alert for a city using the OpenWeather API. 
+    Params:
+        - city: city for which we want to get temperature
+    """
     try: 
         city = city.lower()
         weather_data = get_current_weather(city)
@@ -57,6 +63,12 @@ def get_alerts(city: str):
 
 @mcp.tool()
 def get_weather(city: str, variable: str):
+    """
+    For getting weather (a particular variable - like temperature, wind speed, etc) for a city using the OpenWeather API. 
+    Params:
+        - city: city for which we want to get temperature
+        - variable: variable like 'speed' (for wind speed), 'deg' (for wind direction in degrees), 'temp' (for temperature), 'feels_like' (for temperature feels like), 'temp_min' (for minimum temperature), 'temp_max' (for maximum temperature), 'pressure' (for pressure), 'humidity' (for humidity), 'sea_level' (for sea level), 'grnd_level' (for ground level)
+    """
     try: 
         city = city.lower()
         variable = variable.lower()

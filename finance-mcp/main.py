@@ -3,9 +3,11 @@ import yfinance as yf
 import logging
 import os
 from pathlib import Path
+import tempfile
 
 mcp = FastMCP("finance-mcp")
-LOG_DIR = os.path.join(Path.cwd(), "logs")
+# LOG_DIR = os.path.join(Path.cwd(), "logs")
+LOG_DIR = os.path.join(tempfile.gettempdir(), "finance-mcp-logs")
 os.makedirs(LOG_DIR, exist_ok=True)
 logging.basicConfig(
     filename=os.path.join(LOG_DIR, "finance_mcp.log"),
