@@ -1,0 +1,19 @@
+2026-03-17 22:29:51,699 ERROR HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: AAPL2"}}}
+2026-03-17 22:29:52,251 ERROR $AAPL2: possibly delisted; no price data found  (period=1d) (Yahoo error = "No data found, symbol may be delisted")
+2026-03-17 22:29:52,949 ERROR $AAPL2: possibly delisted; no price data found  (period=1y) (Yahoo error = "No data found, symbol may be delisted")
+2026-03-17 22:29:53,576 ERROR $AAPL2: possibly delisted; no price data found  (period=5d) (Yahoo error = "No data found, symbol may be delisted")
+2026-03-17 22:29:53,576 ERROR Error fetching stock price for AAPL2
+Traceback (most recent call last):
+  File "/Users/harshagarwal/Desktop/mcp-builds/finance-mcp/main.py", line 27, in fetch_price
+    stock_price = ticker.fast_info.get("lastPrice")
+  File "/Users/harshagarwal/Desktop/mcp-builds/venv/lib/python3.14/site-packages/yfinance/scrapers/quote.py", line 101, in get
+    return self[key]
+           ~~~~^^^^^
+  File "/Users/harshagarwal/Desktop/mcp-builds/venv/lib/python3.14/site-packages/yfinance/scrapers/quote.py", line 111, in __getitem__
+    return getattr(self, k)
+  File "/Users/harshagarwal/Desktop/mcp-builds/venv/lib/python3.14/site-packages/yfinance/scrapers/quote.py", line 248, in last_price
+    prices = self._get_1y_prices()
+  File "/Users/harshagarwal/Desktop/mcp-builds/venv/lib/python3.14/site-packages/yfinance/scrapers/quote.py", line 133, in _get_1y_prices
+    ctp = self._md["currentTradingPeriod"]
+          ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'currentTradingPeriod'

@@ -10,13 +10,13 @@ os.makedirs(LOG_DIR, exist_ok=True)
 logging.basicConfig(
     filename=os.path.join(LOG_DIR, "finance_mcp.log"),
     level=logging.ERROR,
-    format="%(asctime)s %(levelname)s %(message)s"
+    format="%(asctime)s %(levelname)s %(message)s",
+    force=True
 )
-print(os.path.join(LOG_DIR, "finance_mcp.log"))
+logger = logging.getLogger()
 
 def fetch_price(symbol: str):
     try:
-        logging.error("TEST LOG WORKING")
         symbol = symbol.upper()
         ticker = yf.Ticker(symbol)
         data = ticker.history(period="1d")
@@ -27,10 +27,10 @@ def fetch_price(symbol: str):
             stock_price = ticker.fast_info.get("lastPrice")
             if stock_price is not None:
                 return {"closing_price": stock_price}
-            logging.error(f"Invalid stock symbol: {symbol}")
+            logger.error(f"Invalid stock symbol: {symbol}")
             return {"closing_price": -1}
     except Exception:
-        logging.exception(f"Error fetching stock price for {symbol}")
+        logger.exception(f"Error fetching stock price for {symbol}")
         return {"closing_price": -1}
 
 @mcp.tool()
@@ -39,7 +39,7 @@ def get_stock_price(symbol: str):
         stock_price = fetch_price(symbol=symbol)
         return stock_price
     except Exception as e:
-        logging.exception(f"Unhandled error in get_stock_price for {symbol}")
+        logger.exception(f"Unhandled error in get_stock_price for {symbol}")
         return {"error": str(e)}
 
 @mcp.tool()
