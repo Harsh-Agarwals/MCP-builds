@@ -84,8 +84,20 @@ MCP client
   }
 ```
 
+- Another way to use MCPs in CC is using **Dockerfile** [Link](https://www.freecodecamp.org/news/how-to-build-an-mcp-server-with-python-docker-and-claude-code/)
+
 ### Some good habits while building MCPs:
 - integrate logging for errors [don't use print statements as it will interfere with the outputs of json-rc]
 - integrate timeout
 - use structured output
 - if outputting csv/etc, prefer limited row size if okay
+- be aware of prompt injections
+
+## For logging, use logger or print(what to print, std.err)
+
+### Ensure file system safety
+**name="../../etc/passwd"** can be vulnurable.
+``` (Safety like this could give limited access)
+if ".." in name or "/" in name or "\\" in name:
+    return json.dumps({"error": "Invalid project name"})
+```
