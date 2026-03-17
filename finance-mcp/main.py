@@ -2,14 +2,17 @@ from mcp.server.fastmcp import FastMCP
 import yfinance as yf
 import logging
 import os
+from pathlib import Path
 
 mcp = FastMCP("finance-mcp")
-os.makedirs("logs", exist_ok=True)
+LOG_DIR = os.path.join(Path.cwd(), "logs")
+os.makedirs(LOG_DIR, exist_ok=True)
 logging.basicConfig(
-    filename="logs/finance_mcp.log",
+    filename=os.path.join(LOG_DIR, "finance_mcp.log"),
     level=logging.ERROR,
     format="%(asctime)s %(levelname)s %(message)s"
 )
+print(os.path.join(LOG_DIR, "finance_mcp.log"))
 
 def fetch_price(symbol: str):
     try:
@@ -36,6 +39,7 @@ def get_stock_price(symbol: str):
         stock_price = fetch_price(symbol=symbol)
         return stock_price
     except Exception as e:
+        logging.exception(f"Unhandled error in get_stock_price for {symbol}")
         return {"error": str(e)}
 
 @mcp.tool()
