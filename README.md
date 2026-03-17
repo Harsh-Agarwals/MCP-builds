@@ -59,7 +59,7 @@ MCP client
 - **Prompts**: prompts to inject to LLM for use cases related to MCP.
 
 ## For testing MCP (this will open MCP inspector - GUI for checking MCP servers working):
-- use `mcp dev path_to_mcp_server_file`
+- use `mcp dev path_to_mcp_server_file` or `npx @modelcontextprotocol/inspector path_to_mcp_server_file`
 
 ## For connection of MCP to Claude Desktop
 - use `mcp install path_to_mcp_server_file --name "mcp_name"`
@@ -83,3 +83,9 @@ MCP client
     }
   }
 ```
+
+### Some good habits while building MCPs:
+- integrate logging for errors [don't use print statements as it will interfere with the outputs of json-rc]
+- integrate timeout
+- use structured output
+- if outputting csv/etc, prefer limited row size if okay
