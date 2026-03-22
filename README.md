@@ -101,3 +101,12 @@ MCP client
 if ".." in name or "/" in name or "\\" in name:
     return json.dumps({"error": "Invalid project name"})
 ```
+
+## Building MCP Client
+For building MCP client, we connect MCP servers to the client and expose it's tools. Later these are combined with LLM calls to get to working.
+
+### Here we have build two MCP Clients:
+- **mcp-client/mcp-client.py:** MCP Client that uses weather MCP server and returns answers to the query asked.
+- **assistant.py:** AI assistant that compares sales and forecasting value for a particular month. Uses filesystem MCP and database MCP to access data.
+
+### Additionally, python file for understanding **Context managers**, **ExitStack** and **AsyncExitStack** is made as well.
