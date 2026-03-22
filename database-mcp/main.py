@@ -1,8 +1,14 @@
 import sqlite3
 from mcp.server.fastmcp import FastMCP
+import os
 
 mcp = FastMCP("database-mcp")
-connection = sqlite3.connect("sales.db", check_same_thread=False)
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "sales.db")
+
+connection = sqlite3.connect(DB_PATH, check_same_thread=False)
+# connection = sqlite3.connect("sales.db", check_same_thread=False)
 
 @mcp.tool()
 def get_sales(month: str):

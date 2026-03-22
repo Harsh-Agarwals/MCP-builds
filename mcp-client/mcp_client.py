@@ -39,9 +39,9 @@ class MCPClient:
             env=None
         )
 
-        stdio_transport = await self.exit_stack.enter_async_context(stdio_client(server_params))
+        stdio_transport = await self.exit_stack.enter_async_context(stdio_client(server_params)) # connecting to server
         self.stdio, self.write = stdio_transport
-        self.session = await self.exit_stack.enter_async_context(ClientSession(self.stdio, self.write))
+        self.session = await self.exit_stack.enter_async_context(ClientSession(self.stdio, self.write)) # starting session for the connection
 
         await self.session.initialize()
 

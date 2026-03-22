@@ -5,7 +5,12 @@ import os
 
 mcp = FastMCP(name="filesystem-mcp")
 
-BASE_DIR = os.path.abspath(".")
+# BASE_DIR = os.path.abspath(".")
+BASE_DIR = os.path.join(os.path.dirname(__file__), "..")
+BASE_DIR = os.path.abspath(BASE_DIR)
+# print(BASE_DIR)
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# print(BASE_DIR)
 def resolve_path(folder_name: str):
     folder_path = os.path.abspath(os.path.join(BASE_DIR, folder_name))
 
