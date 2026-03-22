@@ -58,6 +58,7 @@ class MCPClient:
                 "content": query
             }
         ]
+        print(f'messages: {messages}')
 
         response = await self.session.list_tools()
         available_tools = [{
@@ -76,13 +77,21 @@ class MCPClient:
 
         # Process response and handle tool calls
         final_text = []
-
         assistant_message_content = []
+
+        print(f'final texts: {final_text}')
+        print(f"assistant message: {assistant_message_content}")
+        print(response.content)
+
         for content in response.content:
             if content.type == 'text':
+                print('type-text')
                 final_text.append(content.text)
                 assistant_message_content.append(content)
+                print(f'final texts: {final_text}')
+                print(f"assistant message: {assistant_message_content}")
             elif content.type == 'tool_use':
+                print('type-tool-use')
                 tool_name = content.name
                 tool_args = content.input
 
@@ -105,14 +114,17 @@ class MCPClient:
                         }
                     ]
                 })
+                print(f'final texts: {final_text}')
+                print(f"assistant message: {assistant_message_content}")
+                print(f'messages: {messages}')
 
                 # Get next response from Claude
                 response = self.anthropic.messages.create(
                     model="claude-sonnet-4-20250514",
                     max_tokens=1000,
-                    messages=messages,
-                    tools=available_tools
+                    messages=messages
                 )
+                print(response.content)
 
                 final_text.append(response.content[0].text)
 
