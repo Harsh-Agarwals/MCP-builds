@@ -1,72 +1,196 @@
-# Model Context Protocol
+# Model Context Protocol (MCP) — End-to-End Guide
 
-We're building, using, testing and implementing MCP servers here.
+We are building, using, testing, and implementing MCP servers to fully understand how they work in real-world AI systems.
 
-Why MCP? Everytime you build an app on the top of LLMs, you need to provide a data source (maybe static or maybe live data source or maybe constantly updating data source) for the app. MCP simplifies this by providing a block of code (with filters) to access specific data from the data source. 
+## Why MCP?
 
-There are three things in MCP ecosystem:
-- **Host**: The software/AI stack where everything will be implemented (e.g. Cursor, GPT, AI software, etc)
-- **MCP Client**: Rests inside host system and is given access to MCPs available along with their features, functions, etc. When client gets request for any access (like message from slack channel having keyword `project-x`), MCP client decide what server to send request to along with the parameters required.
-- **MCP Server**: Provides access to data asked by MCP client to the host. It can return data, exposes tools and resources, etc.
+Whenever you build an application on top of LLMs, you need to connect it to data sources. These can be:
 
-Here, we will not just integrate MCPs into our workflow to build simple applications, but also build MCP clients and servers from scratch for end-to-end ecosystem understanding and understanding nuances of MCPs. We'll understand:
+* Static data
+* Live APIs
+* Continuously updating systems
 
-1️⃣ *MCP protocol*
-2️⃣ *tool schemas*
-3️⃣ *tool discovery*
-4️⃣ *AI tool calling*
-5️⃣ *multi-server architecture*
+MCP simplifies this by providing a standardized interface (via tools, resources, and prompts) that allows LLMs to securely and efficiently access data.
 
-We'll build:
-|- **Simple MCP** for simple mathematical functions as tools and resources
-|- **filesystem MCP** [search files, read files, list files, summarize files]
-|- **database MCP** [query data, generate report]
-|- **AI assistants** utilizing some built-in and external MCP servers (eg. using filesystem and database MCPs like *"Compare sales numbers with the forecast document."*)
+---
 
-## Filesystem MCP
-AI assistant
+# MCP Ecosystem Overview
+
+There are three core components:
+
+## 1. Host
+
+The environment where everything runs:
+
+* AI tools (e.g., Cursor, GPT-based apps)
+* Custom AI software
+
+## 2. MCP Client
+
+* Lives inside the host
+* Knows available MCP servers and their capabilities
+* Routes requests to the appropriate MCP server
+
+Example:
+If a Slack message contains `project-x`, the client decides:
+
+* Which MCP server to call
+* What parameters to send
+
+## 3. MCP Server
+
+* Provides access to data
+* Exposes tools and resources
+* Returns structured outputs
+
+---
+
+# What We Will Learn
+
+We will go beyond simple usage and build MCP systems end-to-end:
+
+1. MCP Protocol
+2. Tool Schemas
+3. Tool Discovery
+4. AI Tool Calling
+5. Multi-server Architecture
+
+---
+
+# What We Will Build
+
+## 1. Simple MCP
+
+* Mathematical tools
+* Basic resources
+
+## 2. Filesystem MCP
+
+Capabilities:
+
+* Search files
+* Read files
+* List files
+* Summarize files
+
+Architecture:
+
+```
+AI Assistant
      |
-MCP client
+MCP Client
      |
-filesystem MCP server
+Filesystem MCP Server
      |
-local files
+Local Files
+```
 
-## Database MCP
-AI assistant
+---
+
+## 3. Database MCP
+
+Capabilities:
+
+* Query data
+* Generate reports
+
+Architecture:
+
+```
+AI Assistant
      |
-MCP client
+MCP Client
      |
-database MCP server
+Database MCP Server
      |
 Postgres / SQLite
-
-## AI Assistant
-AI assistant
-     |
-MCP client
-     |
-----------------------
-| filesystem MCP     |
-| database MCP       |
-----------------------
-
-### Building MCP server:
-
-#### Components:
-- **Tools**: Tools are schema-defined interfaces that LLMs can invoke. Each tool performs a single operation with clearly defined inputs and outputs.
-- **Resources**: Resources expose data from files, APIs, databases, or any other source that an AI needs to understand context. Applications can access this information directly and decide how to use it. 
-- **Prompts**: prompts to inject to LLM for use cases related to MCP.
-
-## For testing MCP (this will open MCP inspector - GUI for checking MCP servers working):
-- use `mcp dev path_to_mcp_server_file` or `npx @modelcontextprotocol/inspector path_to_mcp_server_file`
-
-## For connection of MCP to Claude Desktop
-- use `mcp install path_to_mcp_server_file --name "mcp_name"`
-
-## Updates in Claude desktop config json file (an example):
 ```
-"mcpServers": {
+
+---
+
+## 4. AI Assistant (Multi-MCP Integration)
+
+Example use case:
+
+> "Compare sales numbers with the forecast document."
+
+Architecture:
+
+```
+AI Assistant
+     |
+MCP Client
+     |
+----------------------
+| Filesystem MCP     |
+| Database MCP       |
+----------------------
+```
+
+---
+
+# Building an MCP Server
+
+## Core Components
+
+### 1. Tools
+
+* Schema-defined functions
+* Invoked by LLMs
+* Perform a single operation
+* Have clear input/output definitions
+
+---
+
+### 2. Resources
+
+* Provide data from:
+
+  * Files
+  * APIs
+  * Databases
+* Help LLM understand context
+
+---
+
+### 3. Prompts
+
+* Predefined instructions injected into LLM
+* Used for consistent behavior
+
+---
+
+# Testing MCP Servers
+
+Launch MCP Inspector (GUI):
+
+```bash
+mcp dev path_to_mcp_server_file
+```
+
+OR
+
+```bash
+npx @modelcontextprotocol/inspector path_to_mcp_server_file
+```
+
+---
+
+# Connecting MCP to Claude Desktop
+
+Install MCP:
+
+```bash
+mcp install path_to_mcp_server_file --name "mcp_name"
+```
+
+---
+
+## Claude Config Example
+
+```json
+{
+  "mcpServers": {
     "finance mcp": {
       "command": "path_to_uv",
       "args": [
@@ -82,31 +206,126 @@ MCP client
       ]
     }
   }
+}
 ```
 
-- Another way to use MCPs in CC is using **Dockerfile** [Link](https://www.freecodecamp.org/news/how-to-build-an-mcp-server-with-python-docker-and-claude-code/)
+---
 
-### Some good habits while building MCPs:
-- integrate logging for errors [don't use print statements as it will interfere with the outputs of json-rc]
-- integrate timeout
-- use structured output
-- if outputting csv/etc, prefer limited row size if okay
-- be aware of prompt injections
+## Alternative: Docker-Based MCP
 
-## For logging, use logger or print(what to print, std.err)
+You can also run MCP servers using Docker for better isolation and portability.
 
-### Ensure file system safety
-**name="../../etc/passwd"** can be vulnurable.
-``` (Safety like this could give limited access)
+---
+
+# Best Practices for MCP Development
+
+## 1. Logging
+
+* Use logging libraries instead of `print`
+* Avoid interfering with JSON-RPC outputs
+
+```python
+import logging
+logger = logging.getLogger(__name__)
+```
+
+---
+
+## 2. Timeout Handling
+
+* Prevent long-running or stuck processes
+
+---
+
+## 3. Structured Outputs
+
+* Always return consistent JSON responses
+
+---
+
+## 4. Output Size Control
+
+* Limit rows in large outputs (e.g., CSVs)
+
+---
+
+## 5. Prompt Injection Safety
+
+* Validate inputs carefully
+* Avoid blindly trusting user-provided data
+
+---
+
+# Filesystem Safety
+
+Prevent path traversal attacks:
+
+```python
 if ".." in name or "/" in name or "\\" in name:
     return json.dumps({"error": "Invalid project name"})
 ```
 
-## Building MCP Client
-For building MCP client, we connect MCP servers to the client and expose it's tools. Later these are combined with LLM calls to get to working.
+---
 
-### Here we have build two MCP Clients:
-- **mcp-client/mcp-client.py:** MCP Client that uses weather MCP server and returns answers to the query asked.
-- **assistant.py:** AI assistant that compares sales and forecasting value for a particular month. Uses filesystem MCP and database MCP to access data.
+# Building MCP Client
 
-### Additionally, python file for understanding **Context managers**, **ExitStack** and **AsyncExitStack** is made as well.
+The MCP client:
+
+* Connects to multiple MCP servers
+* Exposes tools to the LLM
+* Handles routing and orchestration
+
+---
+
+## Implementations
+
+### 1. `mcp-client/mcp-client.py`
+
+* Uses Weather MCP server
+* Returns answers based on user queries
+
+---
+
+### 2. `assistant.py`
+
+* AI assistant for business insights
+* Example:
+
+  * Compare sales vs forecast
+* Uses:
+
+  * Filesystem MCP
+  * Database MCP
+
+---
+
+## Supporting Concepts
+
+A separate Python file is included to understand:
+
+* Context Managers
+* `ExitStack`
+* `AsyncExitStack`
+
+These are important for:
+
+* Managing multiple MCP connections
+* Handling resource cleanup properly
+
+---
+
+# Summary
+
+MCP enables:
+
+* Modular AI systems
+* Clean separation of concerns
+* Scalable multi-data-source architectures
+
+By building:
+
+* MCP servers
+* MCP clients
+* Integrated assistants
+
+You gain full control over how AI interacts with data in production systems.
